@@ -1,0 +1,9 @@
+keytool -list -v -keystore "C:\Users\hp\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+
+Huellas digitales del certificado:
+         MD5: F6:45:3F:F6:B6:A5:C6:0B:61:B0:6F:81:DD:63:D5:F7
+         SHA1: 5D:F1:68:8F:F8:70:05:8D:92:E7:4C:8F:EF:90:BE:FF:92:0D:C1:FB
+         SHA256: 42:17:CA:9C:C7:45:42:1E:F1:AA:08:C0:4B:99:EE:29:1B:59:13:C7:B6:CE:BD:2B:AB:21:FD:ED:AB:12:14:FA
+Nombre del algoritmo de firma: SHA1withRSA
+Algoritmo de clave pública de asunto: Clave RSA de 1024 bits
+Versión: 1
