@@ -33,7 +33,7 @@ class CardLocalidadWidget extends StatelessWidget {
               child: CachedNetworkImage(
                 height: 210,
                 fit: BoxFit.cover,
-                imageUrl: 'https://d3glgrw24fnm6k.cloudfront.net/wp-content/uploads/2019/03/Fiesta-Nacional-de-la-Noche-m%C3%A1s-Larga-710x470-c-center.jpg',
+                imageUrl: 'https://madryn.org/wp-content/uploads/2017/02/ushuaia.jpg',
                 placeholder: (context, url) => Image.asset(
                   'assets/img/loading.gif',
                   fit: BoxFit.cover,

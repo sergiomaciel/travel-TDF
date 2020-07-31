@@ -11,7 +11,7 @@ import '../models/alojamiento.dart';
 final ApiRest api = ApiRest();
 
 Future<Stream<Alojamiento>> getAlojamientos() async {
-  final String url = '${api.url()}alojamientos';
+  final String url = '${api.url()}alojamientos?select=*,categorias(*),localidades(*),clasificaciones(*)';
 
   final client = new http.Client();
   final streamedRest = await client.send(http.Request('get', Uri.parse(url)));
@@ -24,7 +24,8 @@ Future<Stream<Alojamiento>> getAlojamientos() async {
 }
 
 Future<Stream<Alojamiento>> getAlojamiento(String id) async {
-  final String url = '${api.url()}alojamientos?id=eq.$id';
+  final String url = '${api.url()}alojamientos?eq.$id&select=*,categorias(*),localidades(*),clasificaciones(*)';
+  
 
   final client = new http.Client();
   final streamedRest = await client.send(http.Request('get', Uri.parse(url)));

@@ -17,7 +17,6 @@ class AlojamientoWidget extends StatefulWidget {
 }
 
 class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
-
   AlojamientoController _con;
 
   _AlojamientoWidgetState() : super(AlojamientoController()) {
@@ -32,151 +31,176 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       key: _con.scaffoldKey,
       body: RefreshIndicator(
-              onRefresh: _con.refresh,
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Container(
-                    // margin: EdgeInsets.only(bottom: 120),
-                    // padding: EdgeInsets.only(bottom: 15),
-                    child: CustomScrollView(
-                      primary: true,
-                      shrinkWrap: false,
-                      slivers: <Widget>[
-                        SliverAppBar(
-                          backgroundColor: Theme.of(context).accentColor.withOpacity(0.9),
-                          expandedHeight: 300,
-                          elevation: 0,
-                          iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-                          flexibleSpace: FlexibleSpaceBar(
-                            collapseMode: CollapseMode.parallax,
-                            background: Hero(
-                              tag: widget.routeArgument.heroTag,
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: _con.alojamiento.foto,
-                                placeholder: (context, url) => Image.asset(
-                                  'assets/img/loading.gif',
-                                  fit: BoxFit.cover,
-                                ),
-                                errorWidget: (context, url, error) => Icon(Icons.error),
-                              ),
-                            ),
+        onRefresh: _con.refresh,
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Container(
+              // margin: EdgeInsets.only(bottom: 120),
+              // padding: EdgeInsets.only(bottom: 15),
+              child: CustomScrollView(
+                primary: true,
+                shrinkWrap: false,
+                slivers: <Widget>[
+                  SliverAppBar(
+                    backgroundColor:
+                        Theme.of(context).accentColor.withOpacity(0.9),
+                    expandedHeight: 300,
+                    elevation: 0,
+                    iconTheme:
+                        IconThemeData(color: Theme.of(context).primaryColor),
+                    flexibleSpace: FlexibleSpaceBar(
+                      collapseMode: CollapseMode.parallax,
+                      background: Hero(
+                        tag: widget.routeArgument.heroTag,
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: _con.alojamiento.foto,
+                          placeholder: (context, url) => Image.asset(
+                            'assets/img/loading.gif',
+                            fit: BoxFit.cover,
                           ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                            child: Wrap(
-                              children: [
-                                Row(
+                      ),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 15),
+                      child: Wrap(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                flex: 3,
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Expanded(
-                                      flex: 3,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            _con.alojamiento.nombre,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: Theme.of(context).textTheme.display2,
-                                          ),
-                                          Text(
-                                            _con.alojamiento.getLocalidad().nombre,
-                                            overflow: TextOverflow.fade,
-                                            softWrap: false,
-                                            style: Theme.of(context).textTheme.body1,
-                                          ),
-                                        ],
-                                      ),
+                                    Text(
+                                      _con.alojamiento.nombre,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style:
+                                          Theme.of(context).textTheme.display1,
                                     ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: <Widget>[
-                                          // Helper.getPrice(
-                                          //   _con.food.price,
-                                          //   context,
-                                          //   style: Theme.of(context).textTheme.display3,
-                                          // ),
-                                          // Text(
-                                          //   _con.food.weight + S.of(context).g,
-                                          //   overflow: TextOverflow.ellipsis,
-                                          //   maxLines: 1,
-                                          //   style: Theme.of(context).textTheme.body1,
-                                          // ),
-                                        ],
-                                      ),
+                                    Text(
+                                      _con.alojamiento.localidad.nombre,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                      style: Theme.of(context).textTheme.body1,
                                     ),
                                   ],
                                 ),
-                                ListTile(
-                                  dense: true,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                                  leading: Icon(
-                                    Icons.map,
-                                    color: Theme.of(context).hintColor,
-                                  ),
-                                  title: Text(
-                                    'Clasificación',
-                                    style: Theme.of(context).textTheme.subhead,
-                                  ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    // Helper.getPrice(
+                                    //   _con.food.price,
+                                    //   context,
+                                    //   style: Theme.of(context).textTheme.display3,
+                                    // ),
+                                    // Text(
+                                    //   _con.food.weight + S.of(context).g,
+                                    //   overflow: TextOverflow.ellipsis,
+                                    //   maxLines: 1,
+                                    //   style: Theme.of(context).textTheme.body1,
+                                    // ),
+                                  ],
                                 ),
-                                // ListView.separated(
-                                //   padding: EdgeInsets.all(0),
-                                //   itemBuilder: (context, index) {
-                                //     return ExtraItemWidget(
-                                //       extra: _con.food.extras.elementAt(index),
-                                //       onChanged: _con.calculateTotal,
-                                //     );
-                                //   },
-                                //   separatorBuilder: (context, index) {
-                                //     return SizedBox(height: 20);
-                                //   },
-                                //   itemCount: _con.food.extras.length,
-                                //   primary: false,
-                                //   shrinkWrap: true,
-                                // ),
-                                ListTile(
-                                  dense: true,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                                  leading: Icon(
-                                    Icons.map,
-                                    color: Theme.of(context).hintColor,
-                                  ),
-                                  title: Text(
-                                    'Mapa',
-                                    style: Theme.of(context).textTheme.subhead,
-                                  ),
-                                ),
-                                ListTile(
-                                  dense: true,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                                  leading: Icon(
-                                    Icons.camera,
-                                    color: Theme.of(context).hintColor,
-                                  ),
-                                  title: Text(
-                                    'Mis Fotos',
-                                    style: Theme.of(context).textTheme.subhead,
-                                  ),
-                                ),
-                              ],
+                              ),
+                            ],
+                          ),
+                          ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 10),
+                            leading: Icon(
+                              Icons.star,
+                              color: Theme.of(context).hintColor,
+                            ),
+                            title: Text(
+                              'Categoria',
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                            subtitle: Text(
+                              _con.alojamiento.categoria.estrellas,
+                              style: Theme.of(context).textTheme.caption,
                             ),
                           ),
-                        ),
-                      ],
+                          ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 10),
+                            leading: Icon(
+                              Icons.home,
+                              color: Theme.of(context).hintColor,
+                            ),
+                            title: Text(
+                              'Clasificación',
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                            subtitle: Text(
+                              _con.alojamiento.clasificacion.nombre,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          ),
+                          // ListView.separated(
+                          //   padding: EdgeInsets.all(0),
+                          //   itemBuilder: (context, index) {
+                          //     return ExtraItemWidget(
+                          //       extra: _con.food.extras.elementAt(index),
+                          //       onChanged: _con.calculateTotal,
+                          //     );
+                          //   },
+                          //   separatorBuilder: (context, index) {
+                          //     return SizedBox(height: 20);
+                          //   },
+                          //   itemCount: _con.food.extras.length,
+                          //   primary: false,
+                          //   shrinkWrap: true,
+                          // ),
+                          // ListTile(
+                          //   dense: true,
+                          //   contentPadding: EdgeInsets.symmetric(vertical: 10),
+                          //   leading: Icon(
+                          //     Icons.map,
+                          //     color: Theme.of(context).hintColor,
+                          //   ),
+                          //   title: Text(
+                          //     'Mapa',
+                          //     style: Theme.of(context).textTheme.subhead,
+                          //   ),
+                          // ),
+                          ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 10),
+                            leading: Icon(
+                              Icons.camera,
+                              color: Theme.of(context).hintColor,
+                            ),
+                            title: Text(
+                              'Mis Fotos',
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }

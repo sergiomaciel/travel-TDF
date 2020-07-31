@@ -11,25 +11,31 @@ import '../models/localidad.dart';
 import '../repository/localidad.dart' as repository_localidad;
 
 class AlojamientoController extends ControllerMVC {
-
   Alojamiento alojamiento;
   List<Alojamiento> alojamientos = <Alojamiento>[];
+
+  List<DropdownMenuItem> items_filter_categorias = [];
+  List<int> selectedItemsCategoria = [];
+  List<DropdownMenuItem> items_filter_clasificacion = [];
+  List<int> selectedItemsClasificacion = [];
+  List<DropdownMenuItem> items_filter_localidad = [];
+  List<int> selectedItemsLocalidad = [];
+  
   GlobalKey<ScaffoldState> scaffoldKey;
 
   AlojamientoController() {
     this.scaffoldKey = new GlobalKey<ScaffoldState>();
+    list();
+    loadItemsCategoria();
+    loadItemsClasificacion();
+    loadItemsLocalidad();
   }
 
   void view({String id, String msg}) async {
-    final Stream<Alojamiento> stream = await repository_alojamiento.getAlojamiento(id);
+    final Stream<Alojamiento> stream =
+        await repository_alojamiento.getAlojamiento(id);
     stream.listen((Alojamiento _alojamiento) {
-      print('ID DE LA LOCALIDAD ${_alojamiento.localidad_id}');
-      
       setState(() => alojamiento = _alojamiento);
-      
-      loadCategoria(_alojamiento.categoria_id);
-      loadClasificacion(_alojamiento.clasificacion_id);
-      loadLocalidad(_alojamiento.localidad_id);
     }, onError: (a) {
       print(a);
       scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -44,42 +50,84 @@ class AlojamientoController extends ControllerMVC {
     });
   }
 
-  void loadLocalidad(String id) async{
-    Stream<Localidad> stream = await repository_localidad.getLocalidad(id);
-    stream.listen((Localidad _res) {
-      setState(() => alojamiento.setLocalidad(_res));
-    });
-  }
+  // void loadLocalidad(String id) async {
+  //   Stream<Localidad> stream = await repository_localidad.getLocalidad(id);
+  //   stream.listen((Localidad _res) {
+  //     setState(() => alojamiento.setLocalidad(_res));
+  //   });
+  // }
 
-  void loadCategoria(String id) async{
-    Stream<Categoria> stream = await repository_categoria.getCategoria(id);
-    stream.listen((Categoria _res) {
-      setState(() => alojamiento.setCategoria(_res));
-    });
-  }
-
-
-  void loadClasificacion(String id) async{
-    Stream<Clasificacion> stream = await repository_clasificacion.getClasificacion(id);
-    stream.listen((Clasificacion _res) {
-      setState(() => alojamiento.setClasificacion(_res));
-    });
-  }
-
-  void list() async {
-    final Stream<Alojamiento> stream = await repository_alojamiento.getAlojamientos();
-    stream.listen((Alojamiento _alojamiento) {
-      setState(() => alojamientos.add(_alojamiento));
-    },
-    onError: (a) {
+  void loadItemsLocalidad() async {
+    final Stream<Localidad> stream = await repository_localidad.getLocalidades();
+    stream.listen((Localidad _localidad) {
+      setState(() => items_filter_localidad.add(DropdownMenuItem(
+            child: Text(_localidad.nombre),
+            value: _localidad.nombre,
+          )));
+    }, onError: (a) {
       print(a);
       scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('Error Internet'),
       ));
-    },
-    onDone: () {
-      
-    });
+    }, onDone: () {});
+  }
+
+  // void loadCategoria(String id) async {
+  //   Stream<Categoria> stream = await repository_categoria.getCategoria(id);
+  //   stream.listen((Categoria _res) {
+  //     setState(() => alojamiento.setCategoria(_res));
+  //   });
+  // }
+
+  void loadItemsCategoria() async {
+    final Stream<Categoria> stream = await repository_categoria.getCategorias();
+    stream.listen((Categoria _categoria) {
+      setState(() => items_filter_categorias.add(DropdownMenuItem(
+            child: Text(_categoria.estrellas),
+            value: _categoria.estrellas,
+          )));
+    }, onError: (a) {
+      print(a);
+      scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Error Internet'),
+      ));
+    }, onDone: () {});
+  }  
+
+  // void loadClasificacion(String id) async {
+  //   Stream<Clasificacion> stream =
+  //       await repository_clasificacion.getClasificacion(id);
+  //   stream.listen((Clasificacion _res) {
+  //     setState(() => alojamiento.setClasificacion(_res));
+  //   });
+  // }
+
+  void loadItemsClasificacion() async {
+    final Stream<Clasificacion> stream = await repository_clasificacion.getClasificaciones();
+    stream.listen((Clasificacion _clasificacion) {
+      setState(() => items_filter_clasificacion.add(DropdownMenuItem(
+            child: Text(_clasificacion.nombre),
+            value: _clasificacion.nombre,
+          )));
+    }, onError: (a) {
+      print(a);
+      scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Error Internet'),
+      ));
+    }, onDone: () {});
+  }
+
+  void list() async {
+    final Stream<Alojamiento> stream =
+        await repository_alojamiento.getAlojamientos();
+    stream.listen((Alojamiento _alojamiento) {
+      setState(() => alojamientos.add(_alojamiento));
+    }, onError: (a) {
+      print(a);
+      scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Error Internet'),
+      ));
+    }, onDone: () {});
   }
 
   Future<void> refresh() async {
@@ -87,5 +135,4 @@ class AlojamientoController extends ControllerMVC {
     alojamiento = new Alojamiento();
     view(id: _id);
   }
-
 }

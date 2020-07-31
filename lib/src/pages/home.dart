@@ -6,6 +6,8 @@ import '../controllers/home.dart';
 
 import '../widgets/CarouselLocalidadeslWidget.dart';
 import '../widgets/CarouselAlojamientosWidget.dart';
+import '../widgets/CarouselGastronomicosWidget.dart';
+
 
 class HomeWidget extends StatefulWidget {
   RouteArgument routeArgument;
@@ -67,6 +69,18 @@ class _HomeWidgetState extends StateMVC<HomeWidget> {
               ),
             ),
             CarouselAlojamientosWidget(alojamientos: _con.alojamientos),
+            Padding(
+              padding: const EdgeInsets.only(top: 5, left: 10, right: 20),
+              child: ListTile(
+                dense: true,
+                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                title: Text(
+                  'Gastronomía',
+                  style: Theme.of(context).textTheme.title,
+                )
+              ),
+            ),
+            CarouselGastronomicosWidget(gastronomicos: _con.gastronomicos),
           ],
         )
       )

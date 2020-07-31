@@ -13,14 +13,18 @@ class Alojamiento {
   String lat;
   String lng;
   String foto;
-  String categoria_id;
-  String clasificacion_id;
-  String localidad_id;
-  Categoria _categoria;
-  Clasificacion _clasificacion;
-  Localidad _localidad;
-
+  // String categoria_id;
+  Categoria categoria;
+  // String clasificacion_id;
+  // String localidad_id;
+  // Categoria _categoria;
+  // Clasificacion _clasificacion;
+  Clasificacion clasificacion;
+  // Localidad _localidad;
+  Localidad localidad;
+  
   Alojamiento();
+
 
   Alojamiento.fromJSON(Map<String, dynamic> jsonMap) {
     id = jsonMap['id'].toString();
@@ -29,10 +33,15 @@ class Alojamiento {
     lat = jsonMap['lat'].toString();
     lng = jsonMap['lng'].toString();
     foto = jsonMap['foto'].toString();
-    categoria_id = jsonMap['categoria_id'].toString();
-    clasificacion_id = jsonMap['clasificacion_id'].toString();
-    localidad_id = jsonMap['localidad_id'].toString();
-    _localidad = jsonMap['localidad'] != null ? Localidad.fromJSON(jsonMap['localidad']) : Localidad();
+    
+    // categoria_id = jsonMap['categoria_id'].toString();
+    categoria = jsonMap['categorias'] != null ? Categoria.fromJSON(jsonMap['categorias']) : Categoria();
+    
+    // clasificacion_id = jsonMap['clasificacion_id'].toString();
+    clasificacion = jsonMap['clasificaciones'] != null ? Clasificacion.fromJSON(jsonMap['clasificaciones']) : Clasificacion();
+    
+    // localidad_id = jsonMap['localidad_id'].toString();
+    localidad = jsonMap['localidades'] != null ? Localidad.fromJSON(jsonMap['localidades']) : Localidad();
   }
 
   Map<String, dynamic> toMap() {
@@ -43,33 +52,33 @@ class Alojamiento {
       'lat': lat,
       'lng': lng,
       'foto': foto,
-      'categoria_id': categoria_id,
-      'clasificacion_id': clasificacion_id,
-      'localidad_id': localidad_id,
+      'categoria': categoria,
+      'clasificacion': clasificacion,
+      'localidad': localidad,
     };
   }
 
-  void setCategoria(Categoria categoria) {
-    this._categoria = categoria;
-  }
+  // void setCategoria(Categoria categoria) {
+  //   this._categoria = categoria;
+  // }
 
-  Categoria getCategoria() {
-    return this._categoria;
-  }
+  // Categoria getCategoria() {
+  //   return this._categoria;
+  // }
 
-  void setClasificacion(Clasificacion clasificacion) {
-    this._clasificacion = clasificacion;
-  }
+  // void setClasificacion(Clasificacion clasificacion) {
+  //   this._clasificacion = clasificacion;
+  // }
 
-  Clasificacion getClasificacion() {
-    return this._clasificacion;
-  }
+  // Clasificacion getClasificacion() {
+  //   return this._clasificacion;
+  // }
 
-    void setLocalidad(Localidad localidad) {
-    this._localidad = localidad;
-  }
+  //   void setLocalidad(Localidad localidad) {
+  //   this._localidad = localidad;
+  // }
 
-  Localidad getLocalidad() {
-    return this._localidad;
-  }
+  // Localidad getLocalidad() {
+  //   return this._localidad;
+  // }
 }
