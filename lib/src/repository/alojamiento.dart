@@ -24,7 +24,7 @@ Future<Stream<Alojamiento>> getAlojamientos() async {
 }
 
 Future<Stream<Alojamiento>> getAlojamiento(String id) async {
-  final String url = '${api.url()}alojamientos?eq.$id&select=*,categorias(*),localidades(*),clasificaciones(*)';
+  final String url = '${api.url()}alojamientos?id=eq.$id&select=*,categorias(*),localidades(*),clasificaciones(*)';
   
 
   final client = new http.Client();
