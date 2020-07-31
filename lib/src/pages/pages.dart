@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../pages/home.dart';
 import '../pages/map.dart';
+import '../pages/alojamientos.dart';
+import '../pages/gastronomicos.dart';
 
 // ignore: must_be_immutable
 class PagesWidget extends StatefulWidget {
@@ -11,7 +13,7 @@ class PagesWidget extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   PagesWidget({Key key, this.currentTab}) {
-    currentTab = currentTab != null ? currentTab : 0;
+    currentTab = currentTab != null ? currentTab : 2;
   }
 
   @override
@@ -37,9 +39,15 @@ class _PagesWidgetState extends State<PagesWidget> {
       widget.currentTab = tabItem;
       switch (tabItem) {
         case 0:
-          widget.currentPage = HomeWidget(parentScaffoldKey: widget.scaffoldKey);
+          widget.currentPage = AlojamientosWidget(parentScaffoldKey: widget.scaffoldKey);
           break;
         case 1:
+          widget.currentPage = GastronomicosWidget(parentScaffoldKey: widget.scaffoldKey);
+          break;
+        case 2:
+          widget.currentPage = HomeWidget(parentScaffoldKey: widget.scaffoldKey);
+          break;
+        case 3:
           widget.currentPage = MapWidget();
           break;
         default:
@@ -71,6 +79,14 @@ class _PagesWidgetState extends State<PagesWidget> {
           },
           // this will be set when a new tab is tapped
           items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.domain),
+              title: new Container(height: 0.0),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_dining),
+              title: new Container(height: 0.0),
+            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               title: new Container(height: 0.0),

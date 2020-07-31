@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:travel_tdf/src/pages/alojamiento.dart';
-import 'package:travel_tdf/src/pages/splash.dart';
 
+import '../pages/alojamiento.dart';
+import '../pages/gastronomico.dart';
+import '../pages/splash.dart';
 import './arguments.dart';
 import '../pages/pages.dart';
 import '../pages/home.dart';
@@ -18,6 +19,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => PagesWidget(currentTab: args));
       case '/Alojamiento':
         return MaterialPageRoute(builder: (_) => AlojamientoWidget(routeArgument: args as RouteArgument));
+      case '/Gastronomico':
+        return MaterialPageRoute(builder: (_) => GastronomicoWidget(routeArgument: args as RouteArgument));
       case '/Map':
         return MaterialPageRoute(builder: (_) => MapWidget());
       case '/Splash':
