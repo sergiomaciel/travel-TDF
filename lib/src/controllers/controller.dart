@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
+import '../repository/settings.dart' as settingRepo;
+import '../repository/usuario.dart' as userRepo;
+
 class Controller extends ControllerMVC {
   GlobalKey<ScaffoldState> scaffoldKey;
   Controller() {
@@ -10,7 +13,21 @@ class Controller extends ControllerMVC {
 
   @override
   void initState() {
-    
+    settingRepo.initSettings().then((setting) {
+      setState(() {
+        settingRepo.setting.value = setting;
+      });
+    });
+    settingRepo.setCurrentLocation().then((locationData) {
+      setState(() {
+        settingRepo.locationData = locationData;
+      });
+    });
+    userRepo.getCurrentUser().then((user) {
+      setState(() {
+        userRepo.currentUser.value = user;
+      });
+    });
   }
-
 }
+

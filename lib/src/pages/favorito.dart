@@ -5,21 +5,21 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 
 import '../route/arguments.dart';
 
-import '../controllers/alojamiento.dart';
+import '../controllers/gastronomico.dart';
 
-class AlojamientoWidget extends StatefulWidget {
+class GastronomicoWidget extends StatefulWidget {
   RouteArgument routeArgument;
 
-  AlojamientoWidget({Key key, this.routeArgument}) : super(key: key);
+  GastronomicoWidget({Key key, this.routeArgument}) : super(key: key);
 
   @override
-  _AlojamientoWidgetState createState() => _AlojamientoWidgetState();
+  _GastronomicoWidgetState createState() => _GastronomicoWidgetState();
 }
 
-class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
-  AlojamientoController _con;
+class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
+  GastronomicoController _con;
 
-  _AlojamientoWidgetState() : super(AlojamientoController()) {
+  _GastronomicoWidgetState() : super(GastronomicoController()) {
     _con = controller;
   }
 
@@ -46,27 +46,6 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
                 shrinkWrap: false,
                 slivers: <Widget>[
                   SliverAppBar(
-                    actions: <Widget>[
-                      _con.esFavorito
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.favorite,
-                                  color: Theme.of(context).accentColor,
-                                  size: 30,
-                                ),
-                                tooltip: 'Eliminar Favorito',
-                                onPressed: () {  _con.eliminarFavorite(_con.alojamiento.id); },
-                              )
-                            : IconButton(
-                                icon: Icon(
-                                  Icons.favorite_border,
-                                  color: Theme.of(context).primaryColor,
-                                  size: 30,
-                                ),
-                                tooltip: 'Agregar Favorito',
-                                onPressed: () { _con.agregarFavorito(_con.alojamiento.id); },
-                              ),
-                    ],
                     backgroundColor:
                         Theme.of(context).accentColor.withOpacity(0.9),
                     expandedHeight: 300,
@@ -79,7 +58,7 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
                         tag: widget.routeArgument.heroTag,
                         child: CachedNetworkImage(
                           fit: BoxFit.cover,
-                          imageUrl: _con.alojamiento.foto,
+                          imageUrl: _con.gastronomico.foto,
                           placeholder: (context, url) => Image.asset(
                             'assets/img/loading.gif',
                             fit: BoxFit.cover,
@@ -105,14 +84,14 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      _con.alojamiento.nombre,
+                                      _con.gastronomico.nombre,
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                       style:
                                           Theme.of(context).textTheme.display1,
                                     ),
                                     Text(
-                                      _con.alojamiento.localidad.nombre,
+                                      _con.gastronomico.localidad.nombre,
                                       overflow: TextOverflow.fade,
                                       softWrap: false,
                                       style: Theme.of(context).textTheme.body1,
@@ -141,53 +120,73 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
                               ),
                             ],
                           ),
-                          ListTile(
-                            dense: true,
-                            contentPadding: EdgeInsets.symmetric(vertical: 10),
-                            leading: Icon(
-                              Icons.star,
-                              color: Theme.of(context).hintColor,
-                            ),
-                            title: Text(
-                              'Categoria',
-                              style: Theme.of(context).textTheme.subhead,
-                            ),
-                            subtitle: Text(
-                              _con.alojamiento.categoria.estrellas,
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ),
-                          ListTile(
-                            dense: true,
-                            contentPadding: EdgeInsets.symmetric(vertical: 10),
-                            leading: Icon(
-                              Icons.home,
-                              color: Theme.of(context).hintColor,
-                            ),
-                            title: Text(
-                              'Clasificación',
-                              style: Theme.of(context).textTheme.subhead,
-                            ),
-                            subtitle: Text(
-                              _con.alojamiento.clasificacion.nombre,
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ),
-                          // ListView.separated(
-                          //   padding: EdgeInsets.all(0),
-                          //   itemBuilder: (context, index) {
-                          //     return ExtraItemWidget(
-                          //       extra: _con.food.extras.elementAt(index),
-                          //       onChanged: _con.calculateTotal,
-                          //     );
-                          //   },
-                          //   separatorBuilder: (context, index) {
-                          //     return SizedBox(height: 20);
-                          //   },
-                          //   itemCount: _con.food.extras.length,
-                          //   primary: false,
-                          //   shrinkWrap: true,
+                          // ListTile(
+                          //   dense: true,
+                          //   contentPadding: EdgeInsets.symmetric(vertical: 10),
+                          //   leading: Icon(
+                          //     Icons.star,
+                          //     color: Theme.of(context).hintColor,
+                          //   ),
+                          //   title: Text(
+                          //     'Categoria',
+                          //     style: Theme.of(context).textTheme.subhead,
+                          //   ),
+                          //   subtitle: Text(
+                          //     _con.gastronomico.getCategoria().estrellas,
+                          //     style: Theme.of(context).textTheme.caption,
+                          //   ),
                           // ),
+
+                          ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 10),
+                            leading: Icon(
+                              Icons.accessibility_new,
+                              color: Theme.of(context).hintColor,
+                            ),
+                            title: Text(
+                              'Actividades',
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                          ),
+                          ListView.separated(
+                            padding: EdgeInsets.all(0),
+                            itemBuilder: (context, index) {
+                              return Text(' - '+_con.gastronomico.actividades.elementAt(index).nombre);
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(height: 20);
+                            },
+                            itemCount: _con.gastronomico.actividades.length,
+                            primary: false,
+                            shrinkWrap: true,
+                          ),
+
+                          ListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 10),
+                            leading: Icon(
+                              Icons.format_list_bulleted,
+                              color: Theme.of(context).hintColor,
+                            ),
+                            title: Text(
+                              'Especialidades',
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                          ),
+                          ListView.separated(
+                            padding: EdgeInsets.all(0),
+                            itemBuilder: (context, index) {
+                              return Text(' - '+_con.gastronomico.especialidades.elementAt(index).nombre);
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(height: 20);
+                            },
+                            itemCount: _con.gastronomico.especialidades.length,
+                            primary: false,
+                            shrinkWrap: true,
+                          ),
+
                           // ListTile(
                           //   dense: true,
                           //   contentPadding: EdgeInsets.symmetric(vertical: 10),

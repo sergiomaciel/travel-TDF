@@ -13,14 +13,8 @@ class Alojamiento {
   String lat;
   String lng;
   String foto;
-  // String categoria_id;
   Categoria categoria;
-  // String clasificacion_id;
-  // String localidad_id;
-  // Categoria _categoria;
-  // Clasificacion _clasificacion;
   Clasificacion clasificacion;
-  // Localidad _localidad;
   Localidad localidad;
   
   Alojamiento();

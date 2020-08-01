@@ -5,6 +5,7 @@ import '../pages/home.dart';
 import '../pages/map.dart';
 import '../pages/alojamientos.dart';
 import '../pages/gastronomicos.dart';
+import '../pages/favoritos.dart';
 
 // ignore: must_be_immutable
 class PagesWidget extends StatefulWidget {
@@ -50,6 +51,9 @@ class _PagesWidgetState extends State<PagesWidget> {
         case 3:
           widget.currentPage = MapWidget();
           break;
+        case 4:
+          widget.currentPage = FavoritosWidget(parentScaffoldKey: widget.scaffoldKey);
+          break;
         default:
           widget.currentPage = HomeWidget(parentScaffoldKey: widget.scaffoldKey);
       }
@@ -93,6 +97,10 @@ class _PagesWidgetState extends State<PagesWidget> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.map),
+              title: new Container(height: 0.0),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite),
               title: new Container(height: 0.0),
             )
           ],

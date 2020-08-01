@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import '../models/favotito.dart';
 
 import '../models/alojamiento.dart';
 import '../repository/alojamiento.dart' as repository_alojamiento;
@@ -13,6 +14,9 @@ import '../repository/localidad.dart' as repository_localidad;
 class AlojamientoController extends ControllerMVC {
   Alojamiento alojamiento;
   List<Alojamiento> alojamientos = <Alojamiento>[];
+
+  Favorito favorito;
+  bool esFavorito = false;
 
   List<DropdownMenuItem> items_filter_categorias = [];
   List<int> selectedItemsCategoria = [];
@@ -36,6 +40,7 @@ class AlojamientoController extends ControllerMVC {
         await repository_alojamiento.getAlojamiento(id);
     stream.listen((Alojamiento _alojamiento) {
       setState(() => alojamiento = _alojamiento);
+      isFavorito(_alojamiento.id);
     }, onError: (a) {
       print(a);
       scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -48,6 +53,19 @@ class AlojamientoController extends ControllerMVC {
         // ));
       }
     });
+  }
+
+  void list() async {
+    final Stream<Alojamiento> stream =
+        await repository_alojamiento.getAlojamientos();
+    stream.listen((Alojamiento _alojamiento) {
+      setState(() => alojamientos.add(_alojamiento));
+    }, onError: (a) {
+      print(a);
+      scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Error Internet'),
+      ));
+    }, onDone: () {});
   }
 
   // void loadLocalidad(String id) async {
@@ -117,22 +135,42 @@ class AlojamientoController extends ControllerMVC {
     }, onDone: () {});
   }
 
-  void list() async {
-    final Stream<Alojamiento> stream =
-        await repository_alojamiento.getAlojamientos();
-    stream.listen((Alojamiento _alojamiento) {
-      setState(() => alojamientos.add(_alojamiento));
-    }, onError: (a) {
-      print(a);
+  void isFavorito(String id) async {
+    repository_alojamiento.isFavorito(id).then(( bool value) {
+      setState(() {
+        this.esFavorito = value;
+      });
+    });
+  }
+
+  void agregarFavorito(String id) async {
+    repository_alojamiento.addFavorito(id).then(( Favorito value) {
+      setState(() {
+        this.favorito = value;
+      });
       scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Error Internet'),
+        content: Text('Alojamiento agregado a favoritos'),
       ));
-    }, onDone: () {});
+      isFavorito(alojamiento.id);
+    });
+  }
+
+  void eliminarFavorite(String id) async {
+    repository_alojamiento.removeFavorito(id).then((value) {
+      setState(() {
+        this.favorito = new Favorito();
+      });
+      scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Alojamiento eliminado de favoritos'),
+      ));
+      isFavorito(alojamiento.id);
+    });
   }
 
   Future<void> refresh() async {
     var _id = alojamiento.id;
     alojamiento = new Alojamiento();
     view(id: _id);
+    isFavorito(_id);
   }
 }

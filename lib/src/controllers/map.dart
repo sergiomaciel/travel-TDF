@@ -39,7 +39,7 @@ class MapController extends ControllerMVC {
       setState(() {
         alojamientos.add(_alojamiento);
       });
-      Helper.getMarker(_alojamiento.toMap()).then((marker) {
+      Helper.getMarkerAlojamiento(_alojamiento.toMap()).then((marker) {
         setState(() {
           allMarkers.add(marker);
         });

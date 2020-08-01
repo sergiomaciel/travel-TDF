@@ -20,13 +20,13 @@ class Helper {
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
   }
 
-  static Future<Marker> getMarker(Map<String, dynamic> res) async {
-    final Uint8List markerIcon = await getBytesFromAsset('assets/img/marker.png', 120);
+  static Future<Marker> getMarkerAlojamiento(Map<String, dynamic> res) async {
+    final Uint8List markerIcon = await getBytesFromAsset('assets/img/marker_alojamiento.png', 30,);
     final Marker marker = Marker(
         markerId: MarkerId(res['id']),
         icon: BitmapDescriptor.fromBytes(markerIcon),
         onTap: () {
-          print('El marker seleccionado en el maspa es ${res['id']}');
+          print('El marker seleccionado en el mapa es ${res['id']}');
         },
         anchor: Offset(0.5, 0.5),
         infoWindow: InfoWindow(
@@ -41,7 +41,7 @@ class Helper {
 
   
   static Future<Marker> getMyPositionMarker(double latitude, double longitude) async {
-    final Uint8List markerIcon = await getBytesFromAsset('assets/img/my_marker.png', 120);
+    final Uint8List markerIcon = await getBytesFromAsset('assets/img/my_marker.png', 100);
     final Marker marker = Marker(
         markerId: MarkerId(Random().nextInt(100).toString()),
         icon: BitmapDescriptor.fromBytes(markerIcon),

@@ -26,7 +26,7 @@ class RouteGenerator {
       case '/Splash':
         return MaterialPageRoute(builder: (_) => Splash());
       default:
-        return MaterialPageRoute(builder: (_) => HomeWidget());
+        return MaterialPageRoute(builder: (_) => PagesWidget(currentTab: args));
     }
   }
 

@@ -1,8 +1,25 @@
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/setting.dart';
+
+ValueNotifier<Setting> setting = new ValueNotifier(new Setting());
 LocationData locationData;
+
+Future<Setting> initSettings() async {
+  Setting _setting = Setting();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  
+  await prefs.setString('settings', json.encode(_setting.toMap()));
+  setting.value = _setting;
+  setting.notifyListeners();
+
+  print("Init");
+  return setting.value;
+}
 
 Future<LocationData> setCurrentLocation() async {
   print("serCurrentLocation");
