@@ -83,30 +83,7 @@ Future<Usuario> getCurrentUser() async {
     dynamic userjson = {
       "id": "1",
       "favoritos": [
-        {
-          "id": 1,
-          "tipo": "gastronomico",
-          "id_establecimiento": "2",
-          "alojamiento": {"id": 1},
-          "gastronomico": null,
-          "fotos": []
-        },
-        {
-          "id": 2,
-          "tipo": "gastronomico",
-          "id_establecimiento": "4",
-          "alojamiento": {"id": 1},
-          "gastronomico": null,
-          "fotos": []
-        },
-        {
-          "id": 3,
-          "tipo": "alojamiento",
-          "id_establecimiento": "8",
-          "alojamiento": {"id": 1},
-          "gastronomico": null,
-          "fotos": []
-        }
+        
       ]
     };
     await prefs.setString('current_user', json.encode(userjson));

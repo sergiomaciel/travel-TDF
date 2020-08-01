@@ -46,6 +46,27 @@ class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
                 shrinkWrap: false,
                 slivers: <Widget>[
                   SliverAppBar(
+                    actions: <Widget>[
+                      _con.esFavorito
+                            ? IconButton(
+                                icon: Icon(
+                                  Icons.favorite,
+                                  color: Theme.of(context).accentColor,
+                                  size: 30,
+                                ),
+                                tooltip: 'Eliminar Favorito',
+                                onPressed: () {  _con.eliminarFavorite(_con.gastronomico.id); },
+                              )
+                            : IconButton(
+                                icon: Icon(
+                                  Icons.favorite_border,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 30,
+                                ),
+                                tooltip: 'Agregar Favorito',
+                                onPressed: () { _con.agregarFavorito(_con.gastronomico.id); },
+                              ),
+                    ],
                     backgroundColor:
                         Theme.of(context).accentColor.withOpacity(0.9),
                     expandedHeight: 300,

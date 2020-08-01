@@ -70,7 +70,7 @@ class CardGastronomicoWidget extends StatelessWidget {
                         children: <Widget>[
                           Flexible(
                             child: Text(
-                              'Categoria: ${gastronomico.id}',
+                              'Actividades: ${gastronomico.actividades.length}',
                               overflow: TextOverflow.fade,
                               softWrap: false,
                               style: Theme.of(context).textTheme.body1,
@@ -82,7 +82,7 @@ class CardGastronomicoWidget extends StatelessWidget {
                           ),
                           Flexible(
                             child: Text(
-                              'Clasificacion: ${gastronomico.id}',
+                              'Especial.: ${gastronomico.especialidades.length}',
                               overflow: TextOverflow.fade,
                               softWrap: false,
                               style: Theme.of(context).textTheme.body1,
@@ -94,7 +94,7 @@ class CardGastronomicoWidget extends StatelessWidget {
                           ),
                           Flexible(
                             child: Text(
-                              'Localidad: ${gastronomico.id}',
+                              'Localidad: ${gastronomico.localidad.nombre}',
                               overflow: TextOverflow.fade,
                               softWrap: false,
                               style: Theme.of(context).textTheme.body1,

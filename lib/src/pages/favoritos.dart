@@ -24,12 +24,11 @@ class _FavoritosWidgetState extends StateMVC<FavoritosWidget> {
     _con = controller;
   }
 
-  // @override
-  // void initState() {
-  //   _con.result_gastronomico = _con.gastronomicos;
-  //   super.initState();
-  // }
-
+  @override
+  void initState() {
+    // _con.loadItems();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,7 @@ class _FavoritosWidgetState extends StateMVC<FavoritosWidget> {
           ],
           backgroundColor: Colors.black,
           centerTitle: true,
-          title: Text('Gastronomicos'),
+          title: Text('Favoritos'),
         ),
         key: _con.scaffoldKey,
         body: Column(
@@ -57,7 +56,7 @@ class _FavoritosWidgetState extends StateMVC<FavoritosWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-
+            
             SearchableDropdown.multiple(
               items: _con.items_filter,
               selectedItems: _con.selectedItems,
@@ -72,54 +71,39 @@ class _FavoritosWidgetState extends StateMVC<FavoritosWidget> {
                   _con.selectedItems = value;
                 });
                 print('Establecimientos filtradas: ' + value.toString());
-                // _con.update_result();
+                _con.update_result();
               },
-              closeButton: 'Guardar',
+              closeButton: 'Filtrar',
               doneButton: 'Cerrar',
               isExpanded: true,
             ),
 
-            // Expanded(
-            //   child: ListView.builder(
-            //     scrollDirection: Axis.vertical,
-            //     itemCount: _con.gastronomicos.length,
-            //     itemBuilder: (context, index) {
-            //       return GestureDetector(
-            //         onTap: () {
-            //           Navigator.of(context).pushNamed('/Favorito',
-            //               arguments: RouteArgument(
-            //                   id: _con.gastronomicos.elementAt(index).id,
-            //                   param: 'gastronomico',
-            //                   heroTag:_con.gastronomicos.elementAt(index).nombre));
-            //           print(
-            //               'Click en la ciudad: ${_con.gastronomicos.elementAt(index).nombre}');
-            //         },
-            //         child: CardGastronomicoWidget(
-            //             gastronomico: _con.gastronomicos.elementAt(index),
-            //             heroTag: 'gastronomico'),
-            //       );
-            //     },
-            //   ),
-            // ),
-
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: _con.alojamientos.length,
+                itemCount: _con.favoritos.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushNamed('/Alojamiento',
+                      _con.favoritos.elementAt(index).tipo == 'gastronomico'
+                      ? Navigator.of(context).pushNamed('/Gastronomico',
                           arguments: RouteArgument(
-                              id: _con.alojamientos.elementAt(index).id,
-                              param: 'alojamiento',
-                              heroTag:
-                                   _con.alojamientos.elementAt(index).nombre));
-                      print('Click en la Alojamiento Fav: ${ _con.alojamientos.elementAt(index).nombre}');
+                              id: _con.favoritos.elementAt(index).gastronomico.id,
+                              heroTag: _con.favoritos.elementAt(index).gastronomico.nombre))
+                      : Navigator.of(context).pushNamed('/Alojamiento',
+                          arguments: RouteArgument(
+                              id: _con.favoritos.elementAt(index).alojamiento.id,
+                              heroTag: _con.favoritos.elementAt(index).alojamiento.nombre))
+                      ;
                     },
-                    child: CardAlojamientoWidget(
-                        alojamiento: _con.alojamientos.elementAt(index),
-                        heroTag: 'alojamientos'),
+                    child: _con.favoritos.elementAt(index).tipo == 'gastronomico'
+                    ? CardGastronomicoWidget(
+                        gastronomico: _con.favoritos.elementAt(index).gastronomico,
+                        heroTag: 'gastronomico')
+                    :  CardAlojamientoWidget(
+                        alojamiento: _con.favoritos.elementAt(index).alojamiento,
+                        heroTag: 'alojamiento')
+                    ,
                   );
                 },
               ),

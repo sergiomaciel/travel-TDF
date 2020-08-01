@@ -56,20 +56,35 @@ Future<Stream<Alojamiento>> getFavoritos() async {
     .map((data) => Alojamiento.fromJSON(data));
 }
 
+// void getFavoritos() async {
+//   Usuario _user = userRepo.currentUser.value;
+//   final List<String> ids = _user.favoritos.where((item) => (item.tipo == 'alojamiento')).map((item) => item.id_establecimiento).toList();
+//   final String url = '${api.url()}alojamientos?id=in.(${ids.join(',')})&select=*,categorias(*),localidades(*),clasificaciones(*)';
+
+//   final client = new http.Client();
+//   final streamedRest = await client.send(http.Request('get', Uri.parse(url)));
+
+//   streamedRest.stream
+//     .transform(utf8.decoder)
+//     .transform(json.decoder)
+//     .expand((data) => (data as List))
+//     .map((data) => Alojamiento.fromJSON(data));
+// }
+
 Future<bool> isFavorito(String id) async {
   Usuario _user = userRepo.currentUser.value;
     
-  final List<String> ids = _user.favoritos.where((item) => (item.tipo == 'alojamiento')).map((item) => item.id_establecimiento).toList();
+  final List<String> ids = _user.favoritos.where((item) => (item.tipo == 'alojamiento')).map((item) => item.alojamiento.id).toList();
   
   return ids.contains(id);
 }
 
-Future<Favorito> addFavorito(String id) async {
+Future<Favorito> addFavorito(Alojamiento alojamiento) async {
   Usuario _user = userRepo.currentUser.value;
   Favorito _favorito = Favorito();
 
   _favorito.id = (_user.favoritos.length + 1).toString();
-  _favorito.id_establecimiento = id;
+  _favorito.alojamiento = alojamiento;
   _favorito.tipo = 'alojamiento';
 
   _user.favoritos.add(_favorito);
@@ -83,7 +98,7 @@ Future<Favorito> removeFavorito(String id) async {
 
   _favorito = _user.favoritos
   .where((item) => (item.tipo == 'alojamiento'))
-  .firstWhere((item) => (item.id_establecimiento == id));
+  .firstWhere((item) => (item.alojamiento.id == id));
 
   userRepo.currentUser.value.favoritos.remove(_favorito);
   return _favorito;

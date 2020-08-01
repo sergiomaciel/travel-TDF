@@ -17,6 +17,7 @@ class AlojamientoController extends ControllerMVC {
 
   Favorito favorito;
   bool esFavorito = false;
+  bool filtros = false;
 
   List<DropdownMenuItem> items_filter_categorias = [];
   List<int> selectedItemsCategoria = [];
@@ -144,7 +145,7 @@ class AlojamientoController extends ControllerMVC {
   }
 
   void agregarFavorito(String id) async {
-    repository_alojamiento.addFavorito(id).then(( Favorito value) {
+    repository_alojamiento.addFavorito(this.alojamiento).then(( Favorito value) {
       setState(() {
         this.favorito = value;
       });

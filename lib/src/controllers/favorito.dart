@@ -13,7 +13,7 @@ import '../models/gastronomico.dart';
 import '../repository/gastronomico.dart' as repo_gastronomico;
 
 class FavoritoController extends ControllerMVC {
-  Usuario user = repository.currentUser.value;
+  Usuario usuario = repository.currentUser.value;
 
   Favorito favorito;
   List<Favorito> favoritos = <Favorito>[];
@@ -31,40 +31,20 @@ class FavoritoController extends ControllerMVC {
 
   FavoritoController() {
     this.scaffoldKey = new GlobalKey<ScaffoldState>();
-    listAlojamientos();
-    // listGastronomicos();
+    // list();
+    this.favoritos = this.usuario.favoritos;
     loadItems();
+    
   }
 
-  void view({String id, String tipo, String msg}) async {
-    if (tipo == 'gastronomico') {
-      viewGastronomicos(id: id, msg: msg);
-    } else {
-      viewAlojamiento(id: id, msg: msg);
-    }
-  }
-
-  void viewAlojamiento({String id, String msg}) async {
-    final Stream<Alojamiento> stream =
-        await repository_alojamiento.getAlojamiento(id);
-    stream.listen((Alojamiento _alojamiento) {
-      setState(() => alojamiento = _alojamiento);
-    }, onError: (a) {
-      print(a);
-      scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Error Internet'),
-      ));
-    }, onDone: () {
-      if (msg != null) {
-        // scaffoldKey.currentState.showSnackBar(SnackBar(
-        //   content: Text(msg),
-        // ));
-      }
-    });
+  void list() {
+    listAlojamientos();
+    listGastronomicos();
   }
 
   void listAlojamientos() async {
-    final Stream<Alojamiento> stream = await repository_alojamiento.getFavoritos();
+    final Stream<Alojamiento> stream =
+        await repository_alojamiento.getFavoritos();
     stream.listen((Alojamiento _alojamiento) {
       setState(() => alojamientos.add(_alojamiento));
     }, onError: (a) {
@@ -75,9 +55,9 @@ class FavoritoController extends ControllerMVC {
     }, onDone: () {});
   }
 
-  void viewGastronomicos({String id, String msg}) async {
-    repo_gastronomico.getGastronomico(id).then((Gastronomico data) {
-      setState(() => gastronomico = data);
+  void listGastronomicos() async {
+    repo_gastronomico.getFavoritos().then((List<Gastronomico> list) {
+      setState(() => gastronomicos = list);
     }, onError: (a) {
       print(a);
       scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -86,41 +66,29 @@ class FavoritoController extends ControllerMVC {
     });
   }
 
-  void listGastronomicos() async {
-    user.favoritos
-        .where((item) => (item.tipo == 'gastronomico'))
-        .map((item) => (Favorito item) {
-              repo_gastronomico.getGastronomico(item.id_establecimiento).then(
-                  (Gastronomico data) {
-                setState(() => gastronomicos.add(data));
-              }, onError: (a) {
-                print(a);
-                scaffoldKey.currentState.showSnackBar(SnackBar(
-                  content: Text('Error Internet'),
-                ));
-              });
-            })
-        .toList();
+  void loadItems() {
+
+    this.usuario.favoritos.forEach((data) => (this.items_filter.add(
+                  data.tipo == 'alojamiento'
+                  ?  DropdownMenuItem(
+                    child: Text(data.alojamiento.nombre),
+                    value: data.alojamiento.nombre,
+                  )
+                  : DropdownMenuItem(
+                    child: Text(data.gastronomico.nombre),
+                    value: data.gastronomico.nombre,
+                  )
+                  ))); 
+
   }
 
-  void loadItems() async {
-    // final Stream<Categoria> stream = await repository_categoria.getCategorias();
-    // stream.listen((Categoria _categoria) {
-    //   setState(() => items_filter.add(DropdownMenuItem(
-    //         child: Text(_categoria.estrellas),
-    //         value: _categoria.estrellas,
-    //       )));
-    // }, onError: (a) {
-    //   print(a);
-    //   scaffoldKey.currentState.showSnackBar(SnackBar(
-    //     content: Text('Error Internet'),
-    //   ));
-    // }, onDone: () {});
-  }
+  void update_result() {
+    List<Favorito> result = selectedItems.isEmpty
+        ? usuario.favoritos
+        : usuario.favoritos
+            .where((item) => selectedItems.contains(int.parse(item.id) - 1))
+            .toList();
 
-  Future<void> refresh() async {
-    var _id = alojamiento.id;
-    alojamiento = new Alojamiento();
-    view(id: _id);
+    setState(() => this.favoritos = result);
   }
 }

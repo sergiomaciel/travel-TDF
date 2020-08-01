@@ -70,7 +70,7 @@ class CardAlojamientoWidget extends StatelessWidget {
                         children: <Widget>[
                           Flexible(
                             child: Text(
-                              'Categoria: ${alojamiento.categoria.id}',
+                              'Estrellas: ${alojamiento.categoria.id}',
                               overflow: TextOverflow.fade,
                               softWrap: false,
                               style: Theme.of(context).textTheme.body1,
@@ -82,7 +82,7 @@ class CardAlojamientoWidget extends StatelessWidget {
                           ),
                           Flexible(
                             child: Text(
-                              'Clasificacion: ${alojamiento.clasificacion.id}',
+                              'Clasif: ${alojamiento.clasificacion.nombre}',
                               overflow: TextOverflow.fade,
                               softWrap: false,
                               style: Theme.of(context).textTheme.body1,
@@ -94,7 +94,7 @@ class CardAlojamientoWidget extends StatelessWidget {
                           ),
                           Flexible(
                             child: Text(
-                              'Localidad: ${alojamiento.localidad.id}',
+                              'Local: ${alojamiento.localidad.nombre}',
                               overflow: TextOverflow.fade,
                               softWrap: false,
                               style: Theme.of(context).textTheme.body1,

@@ -92,4 +92,37 @@ class GraphQl implements Api {
   }
 """;
   }
+
+  String getFavoritos(String ids) {
+  return  """
+  query GastronomicosFavoritosQuery {
+    gastronomicos(
+      where: {id: {_in: [${ids}]}}
+    ) {
+      id
+      nombre
+      domicilio
+      foto
+      lat
+      lng
+      actividad_gastronomicos {
+        actividade {
+          id
+          nombre
+        }
+      }
+      especialidad_gastronomicos {
+        especialidade {
+          id
+          nombre
+        }
+      }
+      localidade {
+        id
+        nombre
+      }
+    }
+  }
+""";
+  }
 }

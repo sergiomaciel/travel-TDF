@@ -1,6 +1,11 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:graphql/client.dart';
 import 'package:location/location.dart';
+import '../models/favotito.dart';
+
+import '../models/usuario.dart';
+import '../repository/usuario.dart' as userRepo;
 
 import '../config/api.dart';
 import '../Helpers/helper.dart';
@@ -25,32 +30,44 @@ Future<Gastronomico> getGastronomico(String id) async {
   return data;
 }
 
-// Future<Stream<Alojamiento>> getAlojamiento(String id) async {
-//   final String url = '${api.url()}alojamientos?id=eq.$id';
+Future<List<Gastronomico>> getFavoritos() async {
+  Usuario _user = userRepo.currentUser.value;
+  final List<String> ids = _user.favoritos.where((item) => (item.tipo == 'gastronomico')).map((item) => item.id_establecimiento).toList();
+  final result = await hasuraConnect.query(api.getFavoritos(ids.join(',')));
+  final data = result['data']['gastronomicos'] as List;
+  final List<Gastronomico> list = data.map((e) => Gastronomico.fromJSON(e)).toList();
+  return list;
+}
 
-//   final client = new http.Client();
-//   final streamedRest = await client.send(http.Request('get', Uri.parse(url)));
+Future<bool> isFavorito(String id) async {
+  Usuario _user = userRepo.currentUser.value;
+    
+  final List<String> ids = _user.favoritos.where((item) => (item.tipo == 'gastronomico')).map((item) => item.gastronomico.id).toList();
+  
+  return ids.contains(id);
+}
 
-//   return streamedRest.stream
-//     .transform(utf8.decoder)
-//     .transform(json.decoder)
-//     .expand((data) => (data as List))
-//     .map((data) => Alojamiento.fromJSON(data));
-// }
+Future<Favorito> addFavorito(Gastronomico gastronomico) async {
+  Usuario _user = userRepo.currentUser.value;
+  Favorito _favorito = Favorito();
 
-// Future<Stream<Alojamiento>> getNearRestaurants(LocationData myLocation, LocationData areaLocation) async {
-//   String _nearParams = '';
-//   String _orderLimitParam = '';
-//   if (myLocation != null && areaLocation != null) {
-//     _orderLimitParam = 'orderBy=area&limit=5';
-//     _nearParams = '&myLon=${myLocation.longitude}&myLat=${myLocation.latitude}&areaLon=${areaLocation.longitude}&areaLat=${areaLocation.latitude}';
-//   }
-//   final String url = '${api.url()}alojamientos??$_nearParams&$_orderLimitParam';
+  _favorito.id = (_user.favoritos.length + 1).toString();
+  _favorito.gastronomico = gastronomico;
+  _favorito.tipo = 'gastronomico';
 
-//   final client = new http.Client();
-//   final streamedRest = await client.send(http.Request('get', Uri.parse(url)));
+  _user.favoritos.add(_favorito);
+  userRepo.currentUser.value = _user;
+  return _favorito;
+}
 
-//   return streamedRest.stream.transform(utf8.decoder).transform(json.decoder).map((data) => Helper.getData(data)).expand((data) => (data as List)).map((data) {
-//     return Alojamiento.fromJSON(data);
-//   });
-// }
+Future<Favorito> removeFavorito(String id) async {
+  Usuario _user = userRepo.currentUser.value;
+  Favorito _favorito = Favorito();
+
+  _favorito = _user.favoritos
+  .where((item) => (item.tipo == 'gastronomico'))
+  .firstWhere((item) => (item.gastronomico.id == id));
+
+  userRepo.currentUser.value.favoritos.remove(_favorito);
+  return _favorito;
+}
