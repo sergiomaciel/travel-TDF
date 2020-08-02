@@ -1,10 +1,7 @@
-import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:travel_tdf/src/models/foto.dart';
 import 'package:travel_tdf/src/widgets/CardFotoWidget.dart';
 
 import '../route/arguments.dart';
@@ -22,7 +19,6 @@ class GastronomicoWidget extends StatefulWidget {
 
 class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
   GastronomicoController _con;
-  File _image;
   _GastronomicoWidgetState() : super(GastronomicoController()) {
     _con = controller;
   }
@@ -205,6 +201,7 @@ class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
                           //     style: Theme.of(context).textTheme.subhead,
                           //   ),
                           // ),
+                          
                           _con.esFavorito
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

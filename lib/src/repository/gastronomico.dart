@@ -49,12 +49,6 @@ Future<Favorito> isFavorito(String id) async {
   Usuario _user = userRepo.currentUser.value;
   Favorito _favorito = Favorito();
 
-  // _user.favoritos.forEach((data){
-  //   if ((data.tipo == 'gastronomico') && (data.alojamiento.id == id )) {
-  //     _favorito = data;
-  //   } 
-  // });
-
   _favorito = _user.favoritos
       .where((item) => (item.tipo == 'gastronomico'))
       .firstWhere((item) => item.gastronomico.id == id);

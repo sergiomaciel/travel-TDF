@@ -115,6 +115,7 @@ class GastronomicoController extends ControllerMVC {
     repo_gastronomico.removeFavorito(id).then((value) {
       setState(() {
         this.favorito = new Favorito();
+        this.esFavorito = false;
       });
       scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('Alojamiento eliminado de favoritos'),
