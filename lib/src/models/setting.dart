@@ -1,9 +1,9 @@
 
 class Setting {
   String appName = "Travel TDF";
-  String mainColor = '#000000';
+  String mainColor = '#FFFFFF';
   String secondColor = '#3f51b5';
-  String accentColor = '#f44336';
+  String accentColor = '#000000';
   String scaffoldColor = '#FFF1F1F1';
   String googleMapsKey = 'AIzaSyBFmqr3-aJp23CM3BZPnPqH4nMh9SlgR1Q';
 

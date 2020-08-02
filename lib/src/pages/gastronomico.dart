@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:travel_tdf/src/models/foto.dart';
+import 'package:travel_tdf/src/widgets/CardFotoWidget.dart';
 
 import '../route/arguments.dart';
 
@@ -18,7 +22,7 @@ class GastronomicoWidget extends StatefulWidget {
 
 class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
   GastronomicoController _con;
-
+  File _image;
   _GastronomicoWidgetState() : super(GastronomicoController()) {
     _con = controller;
   }
@@ -48,24 +52,28 @@ class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
                   SliverAppBar(
                     actions: <Widget>[
                       _con.esFavorito
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.favorite,
-                                  color: Theme.of(context).accentColor,
-                                  size: 30,
-                                ),
-                                tooltip: 'Eliminar Favorito',
-                                onPressed: () {  _con.eliminarFavorite(_con.gastronomico.id); },
-                              )
-                            : IconButton(
-                                icon: Icon(
-                                  Icons.favorite_border,
-                                  color: Theme.of(context).primaryColor,
-                                  size: 30,
-                                ),
-                                tooltip: 'Agregar Favorito',
-                                onPressed: () { _con.agregarFavorito(_con.gastronomico.id); },
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.favorite,
+                                color: Colors.redAccent[200],
+                                size: 30,
                               ),
+                              tooltip: 'Eliminar Favorito',
+                              onPressed: () {
+                                _con.eliminarFavorite(_con.gastronomico.id);
+                              },
+                            )
+                          : IconButton(
+                              icon: Icon(
+                                Icons.favorite_border,
+                                color: Theme.of(context).primaryColor,
+                                size: 30,
+                              ),
+                              tooltip: 'Agregar Favorito',
+                              onPressed: () {
+                                _con.agregarFavorito(_con.gastronomico.id);
+                              },
+                            ),
                     ],
                     backgroundColor:
                         Theme.of(context).accentColor.withOpacity(0.9),
@@ -124,40 +132,11 @@ class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
                                 flex: 1,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    // Helper.getPrice(
-                                    //   _con.food.price,
-                                    //   context,
-                                    //   style: Theme.of(context).textTheme.display3,
-                                    // ),
-                                    // Text(
-                                    //   _con.food.weight + S.of(context).g,
-                                    //   overflow: TextOverflow.ellipsis,
-                                    //   maxLines: 1,
-                                    //   style: Theme.of(context).textTheme.body1,
-                                    // ),
-                                  ],
+                                  children: <Widget>[],
                                 ),
                               ),
                             ],
                           ),
-                          // ListTile(
-                          //   dense: true,
-                          //   contentPadding: EdgeInsets.symmetric(vertical: 10),
-                          //   leading: Icon(
-                          //     Icons.star,
-                          //     color: Theme.of(context).hintColor,
-                          //   ),
-                          //   title: Text(
-                          //     'Categoria',
-                          //     style: Theme.of(context).textTheme.subhead,
-                          //   ),
-                          //   subtitle: Text(
-                          //     _con.gastronomico.getCategoria().estrellas,
-                          //     style: Theme.of(context).textTheme.caption,
-                          //   ),
-                          // ),
-
                           ListTile(
                             dense: true,
                             contentPadding: EdgeInsets.symmetric(vertical: 10),
@@ -173,7 +152,10 @@ class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
                           ListView.separated(
                             padding: EdgeInsets.all(0),
                             itemBuilder: (context, index) {
-                              return Text(' - '+_con.gastronomico.actividades.elementAt(index).nombre);
+                              return Text(' - ' +
+                                  _con.gastronomico.actividades
+                                      .elementAt(index)
+                                      .nombre);
                             },
                             separatorBuilder: (context, index) {
                               return SizedBox(height: 20);
@@ -198,7 +180,10 @@ class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
                           ListView.separated(
                             padding: EdgeInsets.all(0),
                             itemBuilder: (context, index) {
-                              return Text(' - '+_con.gastronomico.especialidades.elementAt(index).nombre);
+                              return Text(' - ' +
+                                  _con.gastronomico.especialidades
+                                      .elementAt(index)
+                                      .nombre);
                             },
                             separatorBuilder: (context, index) {
                               return SizedBox(height: 20);
@@ -220,18 +205,69 @@ class _GastronomicoWidgetState extends StateMVC<GastronomicoWidget> {
                           //     style: Theme.of(context).textTheme.subhead,
                           //   ),
                           // ),
-                          ListTile(
-                            dense: true,
-                            contentPadding: EdgeInsets.symmetric(vertical: 10),
-                            leading: Icon(
-                              Icons.camera,
-                              color: Theme.of(context).hintColor,
-                            ),
-                            title: Text(
-                              'Mis Fotos',
-                              style: Theme.of(context).textTheme.subhead,
-                            ),
-                          ),
+                          _con.esFavorito
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                      ListTile(
+                                          dense: true,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          leading: Icon(
+                                            Icons.camera,
+                                            color: Theme.of(context).hintColor,
+                                          ),
+                                          title: Text(
+                                            'Mis Fotos',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subhead,
+                                          ),
+                                          trailing: IconButton(
+                                            icon: Icon(
+                                              Icons.add_a_photo,
+                                              color: Colors.green[800],
+                                              size: 35,
+                                            ),
+                                            tooltip: 'Agregar Foto',
+                                            onPressed: () {
+                                              _con.agregarFoto();
+                                            },
+                                          )),
+                                      ListView.separated(
+                                        padding: EdgeInsets.all(0),
+                                        itemBuilder: (context, index) {
+                                          final item = _con.favorito.fotos
+                                              .elementAt(index);
+
+                                          return Dismissible(
+                                            key: Key(item.id),
+                                            onDismissed: (direction) {
+                                              _con.eliminarFoto(item.id);
+
+                                              Scaffold.of(context).showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          "Foto Eliminada")));
+                                            },
+                                            background:
+                                                Container(color: Colors.red),
+                                            child: CardFotoWidget(
+                                                foto: item,
+                                                heroTag: 'foto_' + item.id),
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return SizedBox(height: 1);
+                                        },
+                                        itemCount: _con.favorito.fotos.length,
+                                        primary: false,
+                                        shrinkWrap: true,
+                                      ),
+                                    ])
+                              : Column(),
                         ],
                       ),
                     ),

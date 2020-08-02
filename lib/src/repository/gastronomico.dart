@@ -20,31 +20,46 @@ HasuraConnect hasuraConnect = HasuraConnect(url);
 Future<List<Gastronomico>> getGastronomicos() async {
   final result = await hasuraConnect.query(api.listGastronomicos);
   final data = result['data']['gastronomicos'] as List;
-  final List<Gastronomico> list = data.map((e) => Gastronomico.fromJSON(e)).toList();
+  final List<Gastronomico> list =
+      data.map((e) => Gastronomico.fromJSON(e)).toList();
   return list;
 }
 
 Future<Gastronomico> getGastronomico(String id) async {
   final result = await hasuraConnect.query(api.getGastronomico(int.parse(id)));
-  final Gastronomico data =  Gastronomico.fromJSON(result['data']['gastronomicos_by_pk']);
+  final Gastronomico data =
+      Gastronomico.fromJSON(result['data']['gastronomicos_by_pk']);
   return data;
 }
 
 Future<List<Gastronomico>> getFavoritos() async {
   Usuario _user = userRepo.currentUser.value;
-  final List<String> ids = _user.favoritos.where((item) => (item.tipo == 'gastronomico')).map((item) => item.id_establecimiento).toList();
+  final List<String> ids = _user.favoritos
+      .where((item) => (item.tipo == 'gastronomico'))
+      .map((item) => item.id_establecimiento)
+      .toList();
   final result = await hasuraConnect.query(api.getFavoritos(ids.join(',')));
   final data = result['data']['gastronomicos'] as List;
-  final List<Gastronomico> list = data.map((e) => Gastronomico.fromJSON(e)).toList();
+  final List<Gastronomico> list =
+      data.map((e) => Gastronomico.fromJSON(e)).toList();
   return list;
 }
 
-Future<bool> isFavorito(String id) async {
+Future<Favorito> isFavorito(String id) async {
   Usuario _user = userRepo.currentUser.value;
-    
-  final List<String> ids = _user.favoritos.where((item) => (item.tipo == 'gastronomico')).map((item) => item.gastronomico.id).toList();
-  
-  return ids.contains(id);
+  Favorito _favorito = Favorito();
+
+  // _user.favoritos.forEach((data){
+  //   if ((data.tipo == 'gastronomico') && (data.alojamiento.id == id )) {
+  //     _favorito = data;
+  //   } 
+  // });
+
+  _favorito = _user.favoritos
+      .where((item) => (item.tipo == 'gastronomico'))
+      .firstWhere((item) => item.gastronomico.id == id);
+
+  return _favorito;
 }
 
 Future<Favorito> addFavorito(Gastronomico gastronomico) async {
@@ -65,8 +80,8 @@ Future<Favorito> removeFavorito(String id) async {
   Favorito _favorito = Favorito();
 
   _favorito = _user.favoritos
-  .where((item) => (item.tipo == 'gastronomico'))
-  .firstWhere((item) => (item.gastronomico.id == id));
+      .where((item) => (item.tipo == 'gastronomico'))
+      .firstWhere((item) => (item.gastronomico.id == id));
 
   userRepo.currentUser.value.favoritos.remove(_favorito);
   return _favorito;

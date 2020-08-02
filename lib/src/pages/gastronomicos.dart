@@ -30,7 +30,6 @@ class _GastronomicosWidgetState extends StateMVC<GastronomicosWidget> {
   //   super.initState();
   // }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +43,11 @@ class _GastronomicosWidgetState extends StateMVC<GastronomicosWidget> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.filter_list),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _con.filtros = !_con.filtros;
+                });
+              },
             )
           ],
           backgroundColor: Colors.black,
@@ -57,70 +60,77 @@ class _GastronomicosWidgetState extends StateMVC<GastronomicosWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
+            _con.filtros
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      
+                        SearchableDropdown.multiple(
+                          items: _con.items_filter_actividad,
+                          selectedItems: _con.selectedItemsActividad,
+                          keyboardType: TextInputType.number,
+                          hint: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text("Select Actividad"),
+                          ),
+                          searchHint: "Select Actividad",
+                          onChanged: (value) {
+                            setState(() {
+                              _con.selectedItemsActividad = value;
+                            });
+                            print('Actividades filtradas: ' + value.toString());
+                            _con.update_result();
+                          },
+                          closeButton: 'Guardar',
+                          doneButton: 'Cerrar',
+                          isExpanded: true,
+                        ),
 
-            // SearchableDropdown.multiple(
-            //   items: _con.items_filter_actividad,
-            //   selectedItems: _con.selectedItemsActividad,
-            //   keyboardType: TextInputType.number,
-            //   hint: Padding(
-            //     padding: const EdgeInsets.all(12.0),
-            //     child: Text("Select Actividad"),
-            //   ),
-            //   searchHint: "Select Actividad",
-            //   onChanged: (value) {
-            //     setState(() {
-            //       _con.selectedItemsActividad = value;
-            //     });
-            //     print('Actividades filtradas: ' + value.toString());
-            //     _con.update_result();
-            //   },
-            //   closeButton: 'Guardar',
-            //   doneButton: 'Cerrar',
-            //   isExpanded: true,
-            // ),
+                        SearchableDropdown.multiple(
+                          items: _con.items_filter_especialidad,
+                          selectedItems: _con.selectedItemsEspecialidad,
+                          keyboardType: TextInputType.text,
+                          hint: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text("Select Especialidad"),
+                          ),
+                          searchHint: "Select Especialidad",
+                          onChanged: (value) {
+                            setState(() {
+                              _con.selectedItemsEspecialidad = value;
+                            });
+                            print('Especialidades filtradas: ' + value.toString());
+                            _con.update_result();
+                          },
+                          closeButton: 'Guardar',
+                          doneButton: 'Cerrar',
+                          isExpanded: true,
+                        ),
 
-            // SearchableDropdown.multiple(
-            //   items: _con.items_filter_especialidad,
-            //   selectedItems: _con.selectedItemsEspecialidad,
-            //   keyboardType: TextInputType.text,
-            //   hint: Padding(
-            //     padding: const EdgeInsets.all(12.0),
-            //     child: Text("Select Especialidad"),
-            //   ),
-            //   searchHint: "Select Especialidad",
-            //   onChanged: (value) {
-            //     setState(() {
-            //       _con.selectedItemsEspecialidad = value;
-            //     });
-            //     print('Especialidades filtradas: ' + value.toString());
-            //     _con.update_result();
-            //   },
-            //   closeButton: 'Guardar',
-            //   doneButton: 'Cerrar',
-            //   isExpanded: true,
-            // ),
-
-            SearchableDropdown.multiple(
-              items: _con.items_filter_localidad,
-              selectedItems: _con.selectedItemsLocalidad,
-              keyboardType: TextInputType.text,
-              hint: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text("Select Localidad"),
-              ),
-              searchHint: "Select Localidad",
-              onChanged: (value) {
-                setState(() {
-                  _con.selectedItemsLocalidad = value;
-                });
-                print('Localidades filtradas: ' + value.toString());
-                // _con.update_result();
-              },
-              closeButton: 'Guardar',
-              doneButton: 'Cerrar',
-              isExpanded: true,
-            ),
-
+                        SearchableDropdown.multiple(
+                          items: _con.items_filter_localidad,
+                          selectedItems: _con.selectedItemsLocalidad,
+                          keyboardType: TextInputType.text,
+                          hint: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text("Select Localidad"),
+                          ),
+                          searchHint: "Select Localidad",
+                          onChanged: (value) {
+                            setState(() {
+                              _con.selectedItemsLocalidad = value;
+                            });
+                            print('Localidades filtradas: ' + value.toString());
+                            _con.update_result();
+                          },
+                          closeButton: 'Guardar',
+                          doneButton: 'Cerrar',
+                          isExpanded: true,
+                        ),
+                      ])
+                : Column(),
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
@@ -131,8 +141,9 @@ class _GastronomicosWidgetState extends StateMVC<GastronomicosWidget> {
                       Navigator.of(context).pushNamed('/Gastronomico',
                           arguments: RouteArgument(
                               id: _con.result_gastronomico.elementAt(index).id,
-                              heroTag:
-                                  _con.result_gastronomico.elementAt(index).nombre));
+                              heroTag: _con.result_gastronomico
+                                  .elementAt(index)
+                                  .nombre));
                       print(
                           'Click en la ciudad: ${_con.result_gastronomico.elementAt(index).nombre}');
                     },

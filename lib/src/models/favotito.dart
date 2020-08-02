@@ -6,7 +6,7 @@ import '../models/gastronomico.dart';
 
 class Favorito {
   String id;
-  List<Foto> fotos;
+  List<Foto> fotos = <Foto>[];
   Alojamiento alojamiento;
   Gastronomico gastronomico;
   String id_establecimiento;

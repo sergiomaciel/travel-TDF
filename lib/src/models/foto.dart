@@ -4,19 +4,23 @@ import 'gastronomico.dart';
 
 class Foto {
   String id;
-  File foto;
+  File local;
+  String url;
+  String fecha;
 
   Foto();
 
   Foto.fromJSON(Map<String, dynamic> jsonMap) {
     id = jsonMap['id'].toString();
-    foto = jsonMap['foto'];
+    local = jsonMap['local'];
+    fecha = jsonMap['fecha'];
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'foto': foto
+      'local': local,
+      'fecha': fecha,
     };
   }
 

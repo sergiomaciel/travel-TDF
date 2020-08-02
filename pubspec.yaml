@@ -17,25 +17,26 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  cupertino_icons: ^0.1.2
+  cached_network_image: ^2.2.0
+  date_format: ^1.0.8
+  dynamic_theme: ^1.0.0
+  firebase_auth: ^0.16.1
+  firebase_storage: ^3.1.6
+  google_maps_flutter: ^0.5.19
+  graphql_flutter: ^3.0.1
+  hasura_connect: ^1.2.2
   flutter:
     sdk: flutter
   http: ^0.12.1
-  google_maps_flutter: ^0.5.19
   location: ^3.0.2
-  firebase_auth: ^0.16.1
-  firebase_storage: ^3.1.6
-  graphql_flutter: ^3.0.1
-  hasura_connect: ^1.2.2
   searchable_dropdown: ^1.1.3
-  date_format: ^1.0.8
-  dynamic_theme: ^1.0.0
   intl: ^0.16.1
-  modal_progress_hud: ^0.1.3
   intro_slider: ^2.3.1
+  image_picker: ^0.6.7
+  modal_progress_hud: ^0.1.3
   path_provider: ^1.6.9
-  cupertino_icons: ^0.1.2
   mvc_pattern: ^6.0.0
-  cached_network_image: ^2.2.0
   loading: ^1.0.2
   shared_preferences: ^0.5.7
 
