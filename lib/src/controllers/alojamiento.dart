@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import '../models/foto.dart';
 import '../models/favotito.dart';
 
 import '../models/alojamiento.dart';
@@ -15,8 +19,9 @@ class AlojamientoController extends ControllerMVC {
   Alojamiento alojamiento;
   List<Alojamiento> alojamientos = <Alojamiento>[];
 
-  Favorito favorito;
+  Favorito favorito = Favorito();
   bool esFavorito = false;
+  File _image;
   bool filtros = false;
 
   List<DropdownMenuItem> items_filter_categorias = [];
@@ -137,9 +142,14 @@ class AlojamientoController extends ControllerMVC {
   }
 
   void isFavorito(String id) async {
-    repository_alojamiento.isFavorito(id).then(( bool value) {
+    repository_alojamiento.isFavorito(id).then((Favorito _favorito) {
       setState(() {
-        this.esFavorito = value;
+        if (_favorito != null) {
+          this.favorito = _favorito;
+          this.esFavorito = true;
+        } else {
+          this.esFavorito = true;
+        }
       });
     });
   }
@@ -160,12 +170,113 @@ class AlojamientoController extends ControllerMVC {
     repository_alojamiento.removeFavorito(id).then((value) {
       setState(() {
         this.favorito = new Favorito();
+        this.esFavorito = false;
       });
       scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('Alojamiento eliminado de favoritos'),
       ));
       isFavorito(alojamiento.id);
     });
+  }
+
+  void _addImg(File image) {
+    setState(() {
+      _image = image;
+
+      Foto _foto = Foto();
+      _foto.id = (this.favorito.fotos.length + 1).toString();
+      _foto.fecha = image.lastModifiedSync().toString().substring(0, 16);
+      _foto.local = image;
+
+      this.favorito.fotos.add(_foto);
+    });
+  }
+
+  void _open_camera() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.camera);
+    this._addImg(image);
+  }
+
+  void _open_gallery() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    this._addImg(image);
+  }
+
+  Future agregarFoto() async {
+    showDialog(
+        context: context,
+        child: SimpleDialog(
+          title: Text("SELECCIONAR", textAlign: TextAlign.center),
+          titlePadding: EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 20,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 5,
+          ),
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FlatButton(
+                        onPressed: () {
+                          _open_gallery();
+                          Navigator.pop(context, 'Lost');
+                        },
+                        // color: Colors.orange,
+                        padding: EdgeInsets.all(10.0),
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.perm_media),
+                            Text("Imágenes")
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                ),
+                Flexible(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FlatButton(
+                        onPressed: () {
+                          _open_camera();
+                          Navigator.pop(context, 'Lost');
+                        },
+                        // color: Colors.orange,
+                        padding: EdgeInsets.all(10.0),
+                        child: Column(
+                          children: <Widget>[
+                            Icon(Icons.camera_alt),
+                            Text("Cámara")
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ));
+  }
+
+  void eliminarFoto( String id) {
+    print('Eliminado foto');
+    Foto _foto = Foto();
+    _foto = this.favorito.fotos.firstWhere((item) => (item.id == id));
+    bool resp = this.favorito.fotos.remove(_foto);
+    print('Eliminada ${resp}');
   }
 
   Future<void> refresh() async {

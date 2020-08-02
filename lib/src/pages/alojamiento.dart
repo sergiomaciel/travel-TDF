@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import '../widgets/CardFotoWidget.dart';
 
 import '../route/arguments.dart';
 
@@ -51,7 +52,7 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
                             ? IconButton(
                                 icon: Icon(
                                   Icons.favorite,
-                                  color: Theme.of(context).accentColor,
+                                  color: Colors.redAccent[200],
                                   size: 30,
                                 ),
                                 tooltip: 'Eliminar Favorito',
@@ -125,17 +126,6 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
-                                    // Helper.getPrice(
-                                    //   _con.food.price,
-                                    //   context,
-                                    //   style: Theme.of(context).textTheme.display3,
-                                    // ),
-                                    // Text(
-                                    //   _con.food.weight + S.of(context).g,
-                                    //   overflow: TextOverflow.ellipsis,
-                                    //   maxLines: 1,
-                                    //   style: Theme.of(context).textTheme.body1,
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -173,21 +163,7 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
                               style: Theme.of(context).textTheme.caption,
                             ),
                           ),
-                          // ListView.separated(
-                          //   padding: EdgeInsets.all(0),
-                          //   itemBuilder: (context, index) {
-                          //     return ExtraItemWidget(
-                          //       extra: _con.food.extras.elementAt(index),
-                          //       onChanged: _con.calculateTotal,
-                          //     );
-                          //   },
-                          //   separatorBuilder: (context, index) {
-                          //     return SizedBox(height: 20);
-                          //   },
-                          //   itemCount: _con.food.extras.length,
-                          //   primary: false,
-                          //   shrinkWrap: true,
-                          // ),
+
                           // ListTile(
                           //   dense: true,
                           //   contentPadding: EdgeInsets.symmetric(vertical: 10),
@@ -200,18 +176,70 @@ class _AlojamientoWidgetState extends StateMVC<AlojamientoWidget> {
                           //     style: Theme.of(context).textTheme.subhead,
                           //   ),
                           // ),
-                          ListTile(
-                            dense: true,
-                            contentPadding: EdgeInsets.symmetric(vertical: 10),
-                            leading: Icon(
-                              Icons.camera,
-                              color: Theme.of(context).hintColor,
-                            ),
-                            title: Text(
-                              'Mis Fotos',
-                              style: Theme.of(context).textTheme.subhead,
-                            ),
-                          ),
+
+                          _con.esFavorito
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                      ListTile(
+                                          dense: true,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          leading: Icon(
+                                            Icons.camera,
+                                            color: Theme.of(context).hintColor,
+                                          ),
+                                          title: Text(
+                                            'Mis Fotos',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subhead,
+                                          ),
+                                          trailing: IconButton(
+                                            icon: Icon(
+                                              Icons.add_a_photo,
+                                              color: Colors.green[800],
+                                              size: 35,
+                                            ),
+                                            tooltip: 'Agregar Foto',
+                                            onPressed: () {
+                                              _con.agregarFoto();
+                                            },
+                                          )),
+                                      ListView.separated(
+                                        padding: EdgeInsets.all(0),
+                                        itemBuilder: (context, index) {
+                                          final item = _con.favorito.fotos
+                                              .elementAt(index);
+
+                                          return Dismissible(
+                                            key: Key(item.id),
+                                            onDismissed: (direction) {
+                                              _con.eliminarFoto(item.id);
+
+                                              Scaffold.of(context).showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          "Foto Eliminada")));
+                                            },
+                                            background:
+                                                Container(color: Colors.red),
+                                            child: CardFotoWidget(
+                                                foto: item,
+                                                heroTag: 'foto_' + item.id),
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return SizedBox(height: 1);
+                                        },
+                                        itemCount: _con.favorito.fotos.length,
+                                        primary: false,
+                                        shrinkWrap: true,
+                                      ),
+                                    ])
+                              : Column(),
                         ],
                       ),
                     ),
