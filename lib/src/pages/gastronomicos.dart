@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
+import 'package:travel_tdf/src/pages/pages.dart';
 
 import '../route/arguments.dart';
 import '../models/gastronomico.dart';
@@ -37,7 +38,7 @@ class _GastronomicosWidgetState extends StateMVC<GastronomicosWidget> {
           leading: IconButton(
               icon: Icon(
                 Icons.menu,
-                color: Colors.white,
+                color: Theme.of(context).hintColor,
               ),
               onPressed: () => {}),
           actions: <Widget>[
@@ -50,7 +51,7 @@ class _GastronomicosWidgetState extends StateMVC<GastronomicosWidget> {
               },
             )
           ],
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).primaryColor,
           centerTitle: true,
           title: Text('Gastronomicos'),
         ),

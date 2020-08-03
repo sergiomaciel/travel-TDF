@@ -6,16 +6,32 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
+import '../models/favotito.dart';
+import '../models/usuario.dart';
+import '../repository/usuario.dart' as repository;
 import '../config/api.dart';
 import '../helpers/helper.dart';
 import '../helpers/maps_util.dart';
 import '../models/alojamiento.dart';
 import '../repository/alojamiento.dart';
+import '../models/gastronomico.dart';
+import '../repository/gastronomico.dart' as repo_gastronomico;
 import '../repository/settings.dart' as sett;
 
 class MapController extends ControllerMVC {
+  Usuario usuario = repository.currentUser.value;
+
   Alojamiento alojamiento;
   List<Alojamiento> alojamientos = <Alojamiento>[];
+
+  Gastronomico gastronomico;
+  List<Gastronomico> gastronomicos = <Gastronomico>[];
+
+  Favorito favorito;
+  List<Favorito> favoritos = <Favorito>[];
+  List<DropdownMenuItem> items_filter = [];
+  List<int> selectedItems = [];
+
   List<Marker> allMarkers = <Marker>[];
   LocationData currentLocation;
   Set<Polyline> polylines = new Set();
@@ -25,12 +41,13 @@ class MapController extends ControllerMVC {
   Completer<GoogleMapController> mapController = Completer();
 
   MapController() {
+    this.favoritos = this.usuario.favoritos;
     alojamiento = Alojamiento();
     alojamiento.lat = '-54.810525';
     alojamiento.lng = '-68.3243295';
+    
     setCurrentLocation();
-    // getDirectionSteps();
-    listAlojamientos();
+    loadItems();
   }
 
   void listAlojamientos() async {
@@ -47,6 +64,72 @@ class MapController extends ControllerMVC {
     }, onError: (a) {}, onDone: () {});
   }
 
+  void listGastronomicos() async {
+    repo_gastronomico.getGastronomicos().then((List<Gastronomico> data) {
+      setState(() => gastronomicos = data);
+      data.forEach((_gastronomico) {
+        Helper.getMarkerGastronomico(_gastronomico.toMap()).then((marker) {
+          setState(() {
+            allMarkers.add(marker);
+          });
+        });
+      });
+    }, onError: (a) {
+      print(a);
+    });
+  }
+
+  void loadItems() {
+    this
+        .usuario
+        .favoritos
+        .forEach((data) => (this.items_filter.add(data.tipo == 'alojamiento'
+            ? DropdownMenuItem(
+                child: Text(data.alojamiento.nombre),
+                value: data.alojamiento.nombre,
+              )
+            : DropdownMenuItem(
+                child: Text(data.gastronomico.nombre),
+                value: data.gastronomico.nombre,
+              ))));
+  }
+
+  void update_result() {
+    List<Favorito> result = selectedItems.isEmpty
+        ? usuario.favoritos
+        : usuario.favoritos
+            .where((item) => selectedItems.contains(int.parse(item.id) - 1))
+            .toList();
+
+    setState(() => this.favoritos = result);
+        this.usuario.favoritos.forEach((data) => (this.items_filter.add(
+                  data.tipo == 'alojamiento'
+                  ?  DropdownMenuItem(
+                    child: Text(data.alojamiento.nombre),
+                    value: data.alojamiento.nombre,
+                  )
+                  : DropdownMenuItem(
+                    child: Text(data.gastronomico.nombre),
+                    value: data.gastronomico.nombre,
+                  )
+                  ))); 
+
+    this.favoritos.forEach((item){
+      item.tipo == 'alojamiento'
+      ? Helper.getMarkerFavorito(item.alojamiento.toMap()).then((marker) {        
+          setState(() {
+            allMarkers.add(marker);
+          });
+        })
+      : Helper.getMarkerFavorito(item.gastronomico.toMap()).then((marker) {        
+          setState(() {
+            allMarkers.add(marker);
+          });
+        })
+      ;
+    });
+  }
+
   void setCurrentLocation() async {
     try {
       LocationData nowLocation = await sett.setCurrentLocation();
@@ -54,11 +137,14 @@ class MapController extends ControllerMVC {
         currentLocation = nowLocation;
         cameraPosition = CameraPosition(
           // target: LatLng(nowLocation.latitude, nowLocation.longitude),
-           target: LatLng(double.parse(alojamiento.lat), double.parse(alojamiento.lng)),
-           zoom: 14.4746,
+          target: LatLng(
+              double.parse(alojamiento.lat), double.parse(alojamiento.lng)),
+          zoom: 14.4746,
         );
       });
-      Helper.getMyPositionMarker(double.parse(alojamiento.lat), double.parse(alojamiento.lng)).then((marker) {
+      Helper.getMyPositionMarker(
+              double.parse(alojamiento.lat), double.parse(alojamiento.lng))
+          .then((marker) {
         setState(() {
           allMarkers.add(marker);
         });
@@ -102,8 +188,10 @@ class MapController extends ControllerMVC {
   void getAlojamientosOfArea() async {
     setState(() {
       alojamientos = <Alojamiento>[];
-      LocationData areaLocation = LocationData.fromMap(
-          {"latitude": cameraPosition.target.latitude, "longitude": cameraPosition.target.longitude});
+      LocationData areaLocation = LocationData.fromMap({
+        "latitude": cameraPosition.target.latitude,
+        "longitude": cameraPosition.target.longitude
+      });
       if (cameraPosition != null) {
         listAlojamientos();
         // listAlojamientos(currentLocation, areaLocation);
@@ -116,28 +204,28 @@ class MapController extends ControllerMVC {
 
   void getDirectionSteps() async {
     currentLocation = await sett.getCurrentLocation();
-    mapsUtil.get(
-      "origin=" +
-      currentLocation.latitude.toString() +
-      "," +
-      currentLocation.longitude.toString() +
-      "&destination=" +
-      alojamiento.lat +
-      "," +
-      alojamiento.lng +
-      "&key=${api.googleMapsKey()}"
-    ).then((dynamic res) {
-      
+    mapsUtil
+        .get("origin=" +
+            currentLocation.latitude.toString() +
+            "," +
+            currentLocation.longitude.toString() +
+            "&destination=" +
+            alojamiento.lat +
+            "," +
+            alojamiento.lng +
+            "&key=${api.googleMapsKey()}")
+        .then((dynamic res) {
       List<LatLng> _latLng = res as List<LatLng>;
-      _latLng.insert(0, new LatLng(currentLocation.latitude, currentLocation.longitude));
+      _latLng.insert(
+          0, new LatLng(currentLocation.latitude, currentLocation.longitude));
       setState(() {
         polylines.add(new Polyline(
-        visible: true,
-        polylineId: new PolylineId(currentLocation.hashCode.toString()),
-        points: _latLng,
-        color: Colors.green,
-        width: 6));
-        });
+            visible: true,
+            polylineId: new PolylineId(currentLocation.hashCode.toString()),
+            points: _latLng,
+            color: Colors.green,
+            width: 6));
+      });
     });
   }
 

@@ -37,7 +37,7 @@ class _FavoritosWidgetState extends StateMVC<FavoritosWidget> {
           leading: IconButton(
               icon: Icon(
                 Icons.menu,
-                color: Colors.white,
+                color: Theme.of(context).hintColor,
               ),
               onPressed: () => {}),
           actions: <Widget>[
@@ -46,7 +46,7 @@ class _FavoritosWidgetState extends StateMVC<FavoritosWidget> {
               onPressed: () {},
             )
           ],
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).primaryColor,
           centerTitle: true,
           title: Text('Favoritos'),
         ),

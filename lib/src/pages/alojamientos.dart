@@ -58,7 +58,7 @@ class _AlojamientosWidgetState extends StateMVC<AlojamientosWidget> {
           leading: IconButton(
               icon: Icon(
                 Icons.menu,
-                color: Colors.white,
+                color: Theme.of(context).hintColor,
               ),
               onPressed: () => {}),
           actions: <Widget>[
@@ -71,7 +71,7 @@ class _AlojamientosWidgetState extends StateMVC<AlojamientosWidget> {
               },
             )
           ],
-          backgroundColor: Colors.black,
+          backgroundColor: Theme.of(context).primaryColor,
           centerTitle: true,
           title: Text('Alojamientos'),
         ),

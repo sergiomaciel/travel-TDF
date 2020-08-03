@@ -45,13 +45,13 @@ class _HomeWidgetState extends StateMVC<HomeWidget> {
                 .merge(TextStyle(letterSpacing: 1.3)),
           ),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.favorite),
-              color: Colors.redAccent[400],
-              onPressed: () {
-                //  Navigator.of(context).pushReplacementNamed('/Pages', arguments: 3);
-              },
-            )
+            // IconButton(
+            //   icon: Icon(Icons.favorite),
+            //   color: Colors.redAccent[400],
+            //   onPressed: () {
+            //     //  Navigator.of(context).pushReplacementNamed('/Pages', arguments: 3);
+            //   },
+            // )
           ],
         ),
         body: SingleChildScrollView(

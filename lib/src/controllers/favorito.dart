@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:travel_tdf/src/models/favotito.dart';
-import 'package:travel_tdf/src/models/gastronomico.dart';
-import 'package:flutter/material.dart';
-import 'package:mvc_pattern/mvc_pattern.dart';
 
+import '../models/favotito.dart';
+import '../models/gastronomico.dart';
 import '../models/usuario.dart';
 import '../repository/usuario.dart' as repository;
 import '../models/alojamiento.dart';

@@ -62,6 +62,7 @@ flutter:
     - assets/img/my_marker.png
     - assets/img/marker_alojamiento.png
     - assets/img/marker_gastronomia.png
+    - assets/img/marker_favorito.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
