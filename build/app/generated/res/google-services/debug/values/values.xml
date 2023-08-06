@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">587045375587-03757t7121gbltlk1g8p247s1qoj17k8.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">587045375587</string>
+    <string name="google_api_key" translatable="false">AIzaSyCAtqZ5WnpHxomJj-2OURJDvk08V-2yS0A</string>
+    <string name="google_app_id" translatable="false">1:587045375587:android:644b8e91e36e2cb1a3f256</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCAtqZ5WnpHxomJj-2OURJDvk08V-2yS0A</string>
+    <string name="google_storage_bucket" translatable="false">travel-app-53dd0.appspot.com</string>
+    <string name="project_id" translatable="false">travel-app-53dd0</string>
+</resources>
