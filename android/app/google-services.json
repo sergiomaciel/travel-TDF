@@ -1,42 +1,33 @@
 {
   "project_info": {
-    "project_number": "75405425866",
-    "firebase_url": "https://travel-tdf.firebaseio.com",
-    "project_id": "travel-tdf",
-    "storage_bucket": "travel-tdf.appspot.com"
+    "project_number": "587045375587",
+    "project_id": "travel-app-53dd0",
+    "storage_bucket": "travel-app-53dd0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:75405425866:android:f23c837d70618964014833",
+        "mobilesdk_app_id": "1:587045375587:android:644b8e91e36e2cb1a3f256",
         "android_client_info": {
-          "package_name": "com.example.travel_tdf"
+          "package_name": "com.example.travel_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "75405425866-mmhucbum1dbgcecimcll3s06ocpjehcl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.travel_tdf",
-            "certificate_hash": "5df1688ff870058d92e74c8fef90beff920dc1fb"
-          }
-        },
-        {
-          "client_id": "75405425866-lg2gcbvb2bperook0fccnfp341rn3t09.apps.googleusercontent.com",
+          "client_id": "587045375587-03757t7121gbltlk1g8p247s1qoj17k8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC8FP5m09f9oCWWaubtHRpYTwEQyB8Ys9s"
+          "current_key": "AIzaSyCAtqZ5WnpHxomJj-2OURJDvk08V-2yS0A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "75405425866-lg2gcbvb2bperook0fccnfp341rn3t09.apps.googleusercontent.com",
+              "client_id": "587045375587-03757t7121gbltlk1g8p247s1qoj17k8.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,71 +1,62 @@
-import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:travel_tdf/src/pages/pages.dart';
-import 'src/controllers/controller.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/helpers/binding.dart';
+import 'package:travel_app/helpers/constants.dart';
+import 'package:travel_app/helpers/main_user.dart';
+import 'package:travel_app/multi_language/langeuages/translations.dart';
+import 'package:travel_app/helpers/catch_storage.dart';
+import 'package:travel_app/views/splash/splash_screen.dart';
 
-import 'src/route/route_generator.dart';
-import 'src/helpers/app_config.dart' as config;
-import 'src/models/setting.dart';
-import 'src/repository/settings.dart' as settingRepo;
-import 'src/repository/usuario.dart' as userRepo;
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await GetStorage.init();
+  MainUser.instance.onInit();
+  // await CatchStorage.clear();  // Remove this line,
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-  @override
-  _MyAppState createState() => _MyAppState();
-}
+  String _getLanguage() {
+    String lang = CatchStorage.get(k_langKey) ?? "en";
+    return lang;
+  }
 
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    settingRepo.initSettings();
-    settingRepo.getCurrentLocation();
-    userRepo.getCurrentUser();
-    super.initState();
+  String? _getFont() {
+    if (_getLanguage() == "en") {
+      return GoogleFonts.poppins().fontFamily;
+    }
+    if (_getLanguage() == "ar") {
+      return GoogleFonts.tajawal().fontFamily;
+    }
+    return GoogleFonts.poppins().fontFamily;
   }
 
   @override
   Widget build(BuildContext context) {
-    return DynamicTheme(
-        defaultBrightness: Brightness.light,
-        data: (brightness) => ThemeData(
-          fontFamily: 'Poppins',
-          primaryColor: config.Colors().mainColor(1),
-          accentColor: config.Colors().accentColor(1),
-          focusColor: config.Colors().secondColor(1),
-          hintColor: config.Colors().secondColor(1),
-          scaffoldBackgroundColor: config.Colors().scaffoldColor(1),
-          brightness: brightness,
-          textTheme: TextTheme(
-            headline: TextStyle(fontSize: 20.0, color: config.Colors().secondColor(1)),
-            display1: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: config.Colors().secondColor(1)),
-            display2: TextStyle(fontSize: 30.0, fontWeight: FontWeight.w600, color: Colors.black),
-            display3: TextStyle(fontSize: 40.0, fontWeight: FontWeight.w700, color: Colors.black),
-            display4: TextStyle(fontSize: 50.0, fontWeight: FontWeight.w300, color: config.Colors().secondColor(1)),
-            subhead: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.black54),
-            title: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: config.Colors().accentColor(1)),
-            body1: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black54),
-            body2: TextStyle(fontSize: 16.0, color: config.Colors().secondColor(1)),
-            caption: TextStyle(fontSize: 12.0, color: config.Colors().accentColor(1)),
-          ),
+    return GetMaterialApp(
+      title: 'Travel App',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
         ),
-        themedWidgetBuilder: (context, theme) {
-          return ValueListenableBuilder(
-              valueListenable: settingRepo.setting,
-              builder: (context, Setting _setting, _) {
-                return MaterialApp(
-                  title: _setting.appName,
-                  initialRoute: '/Pages',
-                  onGenerateRoute: RouteGenerator.generateRoute,
-                  debugShowCheckedModeBanner: false,
-                  theme: theme,
-                );
-              });
-        });
+        canvasColor: k_canvas,
+        primarySwatch: k_primaryColor,
+        fontFamily: _getFont(),
+      ),
+      // locale: Locale("ar"),
+      locale: Locale(_getLanguage()),
+      fallbackLocale: Locale("en"),
+      translations: Translation(),
+      initialBinding: Binding(),
+      home: SplashScreen(),
+    );
   }
 }
